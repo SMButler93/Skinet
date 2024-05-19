@@ -11,7 +11,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<SkinetDbContext>(options =>
-options.UseSqlite(builder.Configuration.GetConnectionString("DevDefaultConnection")));
+{
+    options.UseSqlite(builder.Configuration.GetConnectionString("DevDefaultConnection"));
+});
 
 var app = builder.Build();
 
@@ -27,5 +29,19 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+var context = services.GetRequiredService<SkinetDbContext>();
+var logger = services.GetRequiredService<ILogger<Program>>();
+
+try
+{
+    await context.Database.MigrateAsync();
+}
+catch(Exception e)
+{
+    logger.LogError(e, "An error occured during the database migration.");
+}
 
 app.Run();
