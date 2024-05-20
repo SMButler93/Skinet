@@ -139,7 +139,7 @@
     "Name": "Angular Blue Boots",
     "Description": "Suspendisse dui purus, scelerisque at, vulputate vitae, pretium mattis, nunc. Mauris eget neque at sem venenatis eleifend. Ut nonummy.",
     "Price": 180,
-    "PImageUrl": "images/products/boot-ang1.png",
+    "ImageUrl": "images/products/boot-ang1.png",
     "ProductTypeId": 3,
     "ProductBrandId": 1
   }

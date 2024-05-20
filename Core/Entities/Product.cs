@@ -8,7 +8,7 @@
 
         public decimal Price { get; set; }
 
-        public string ImgaeUrl { get; set; }
+        public string ImageUrl { get; set; }
 
         public int  ProductTypeId { get; set; }
 
