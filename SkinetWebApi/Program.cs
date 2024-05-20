@@ -1,3 +1,4 @@
+using Core.Interfaces;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,6 +15,8 @@ builder.Services.AddDbContext<SkinetDbContext>(options =>
 {
     options.UseSqlite(builder.Configuration.GetConnectionString("DevDefaultConnection"));
 });
+
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 var app = builder.Build();
 
@@ -32,13 +35,13 @@ app.MapControllers();
 
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
-var context = services.GetRequiredService<SkinetDbContext>();
+var dbContext = services.GetRequiredService<SkinetDbContext>();
 var logger = services.GetRequiredService<ILogger<Program>>();
 
 try
 {
-    await context.Database.MigrateAsync();
-    await SkinetDbContextSeed.SeedAsync(context);
+    await dbContext.Database.MigrateAsync();
+    await SkinetDbContextSeed.SeedAsync(dbContext);
 }
 catch(Exception e)
 {
