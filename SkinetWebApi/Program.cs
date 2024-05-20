@@ -32,16 +32,17 @@ app.MapControllers();
 
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
-var context = services.GetService<SkinetDbContext>();
-var logger = services.GetService<ILogger<Program>>();
+var context = services.GetRequiredService<SkinetDbContext>();
+var logger = services.GetRequiredService<ILogger<Program>>();
 
 try
 {
     await context.Database.MigrateAsync();
+    await SkinetDbContextSeed.SeedAsync(context);
 }
 catch(Exception e)
 {
-    logger.LogError($"An error occured during the migration: {e}");
+    logger.LogError($"An error occurred during the migration: {e}");
 }
 
 app.Run();
