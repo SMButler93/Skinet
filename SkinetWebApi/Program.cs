@@ -32,8 +32,8 @@ app.MapControllers();
 
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
-var context = services.GetRequiredService<SkinetDbContext>();
-var logger = services.GetRequiredService<ILogger<Program>>();
+var context = services.GetService<SkinetDbContext>();
+var logger = services.GetService<ILogger<Program>>();
 
 try
 {
@@ -41,7 +41,7 @@ try
 }
 catch(Exception e)
 {
-    logger.LogError(e, "An error occured during the database migration.");
+    logger.LogError($"An error occured during the migration: {e}");
 }
 
 app.Run();
