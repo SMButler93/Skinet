@@ -1,8 +1,6 @@
 ﻿using Core.Entities;
 using Core.Interfaces;
-using Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace SkinetWebApi.Controllers
 {
@@ -20,16 +18,28 @@ namespace SkinetWebApi.Controllers
         [HttpGet]
         public async  Task<ActionResult<List<Product>>> GetAllProducts()
         {
-            var products = await _repository.GetAllProductsAsync();
-
-            return Ok(products);
+            return Ok(await _repository.GetAllProductsAsync());
         }
 
         [HttpGet]
         [Route("{id:int}")]
         public async Task<ActionResult<Product>> GetProduct([FromRoute] int id)
         {
-            return await _repository.GetProductById(id);
+            return await _repository.GetProductByIdAsync(id);
+        }
+
+        [HttpGet]
+        [Route("Brands")]
+        public async Task<ActionResult<List<ProductBrand>>> GetAllBrands()
+        {
+            return Ok(await _repository.GetAllProductBrandsAsync());
+        }
+
+        [Route("Types")]
+        [HttpGet]
+        public async Task<ActionResult<List<ProductType>>> GetAllTypes()
+        {
+            return Ok(await _repository.GetAllProductTypesAsync());
         }
     }
 }
