@@ -8,38 +8,43 @@ namespace SkinetWebApi.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        private readonly IProductRepository _repository;
+        private readonly IGenericRepository<Product> _productsRepo;
+        private readonly IGenericRepository<ProductBrand> _productBrandsRepo;
+        private readonly IGenericRepository<ProductType> _productTypeRepo;
 
-        public ProductsController(IProductRepository repository)
+        public ProductsController(IGenericRepository<Product> productsRepo,
+            IGenericRepository<ProductBrand> productBrandsRepo, IGenericRepository<ProductType> productTypeRepo)
         {
-            _repository = repository;
+            _productsRepo = productsRepo;
+            _productBrandsRepo = productBrandsRepo;
+            _productTypeRepo = productTypeRepo;
         }
 
         [HttpGet]
         public async  Task<ActionResult<List<Product>>> GetAllProducts()
         {
-            return Ok(await _repository.GetAllProductsAsync());
+            return Ok(await _productsRepo.GetAllAsync());
         }
 
         [HttpGet]
         [Route("{id:int}")]
         public async Task<ActionResult<Product>> GetProduct([FromRoute] int id)
         {
-            return await _repository.GetProductByIdAsync(id);
+            return await _productsRepo.GetByIdAsync(id);
         }
 
         [HttpGet]
         [Route("Brands")]
         public async Task<ActionResult<List<ProductBrand>>> GetAllBrands()
         {
-            return Ok(await _repository.GetAllProductBrandsAsync());
+            return Ok(await _productBrandsRepo.GetAllAsync());
         }
 
         [Route("Types")]
         [HttpGet]
         public async Task<ActionResult<List<ProductType>>> GetAllTypes()
         {
-            return Ok(await _repository.GetAllProductTypesAsync());
+            return Ok(await _productTypeRepo.GetAllAsync());
         }
     }
 }
