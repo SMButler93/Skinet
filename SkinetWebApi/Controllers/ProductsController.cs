@@ -1,5 +1,6 @@
 ﻿using Core.Entities;
 using Core.Interfaces;
+using Core.Specifications;
 using Microsoft.AspNetCore.Mvc;
 
 namespace SkinetWebApi.Controllers
@@ -23,14 +24,18 @@ namespace SkinetWebApi.Controllers
         [HttpGet]
         public async  Task<ActionResult<List<Product>>> GetAllProducts()
         {
-            return Ok(await _productsRepo.GetAllAsync());
+            var spec = new ProductsWithTypeAndBrandSpecification();
+
+            return Ok(await _productsRepo.ListAllBySpecAsync(spec));
         }
 
         [HttpGet]
         [Route("{id:int}")]
         public async Task<ActionResult<Product>> GetProduct([FromRoute] int id)
         {
-            return await _productsRepo.GetByIdAsync(id);
+            var spec = new ProductsWithTypeAndBrandSpecification(id);
+
+            return Ok(await _productsRepo.GetEntityBySpecAsync(spec));
         }
 
         [HttpGet]
@@ -40,11 +45,13 @@ namespace SkinetWebApi.Controllers
             return Ok(await _productBrandsRepo.GetAllAsync());
         }
 
-        [Route("Types")]
         [HttpGet]
+        [Route("Types")]
         public async Task<ActionResult<List<ProductType>>> GetAllTypes()
         {
-            return Ok(await _productTypeRepo.GetAllAsync());
+            var spec = new ProductTypeSpecification();
+
+            return Ok(await _productTypeRepo.ListAllBySpecAsync(spec));
         }
     }
 }
